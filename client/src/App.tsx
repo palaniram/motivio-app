@@ -7,7 +7,7 @@ import Login from './pages/Login.js'
 import Subscribe from './pages/Subscribe.js'
 
 const queryClient = new QueryClient()
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ?? ''
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string
 
 export default function App() {
   return (
