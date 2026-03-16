@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Lead {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  county           String
+  lead_type        String
+  owner_name       String?
+  property_address String
+  city             String?
+  zip              String?
+  filing_date      DateTime?    @db.Date
+  loan_amount      Decimal?
+  trustee_name     String?
+  source           String?
+  source_file      String?
+  external_id      String?
+  created_at       DateTime     @default(now())
+  updated_at       DateTime     @default(now()) @updatedAt
+
+  enrichment Enrichment?
+  ai_summary AiSummary?
+
+  @@unique([property_address, filing_date])
+  @@index([county, filing_date])
+  @@index([lead_type, filing_date])
+  @@map("leads")
+}
+
+model Enrichment {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lead_id           String   @unique @db.Uuid
+  phone_1           String?
+  phone_2           String?
+  phone_3           String?
+  email_1           String?
+  email_2           String?
+  mailing_address   String?
+  estimated_value   Decimal?
+  estimated_equity  Decimal?
+  property_type     String?
+  bedrooms          Int?
+  bathrooms         Decimal?
+  sq_ft             Int?
+  year_built        Int?
+  last_sale_date    DateTime? @db.Date
+  last_sale_price   Decimal?
+  enrichment_source String?
+  raw_response      Json?
+  enriched_at       DateTime  @default(now())
+
+  lead Lead @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+
+  @@map("enrichment")
+}
+
+model AiSummary {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lead_id       String   @unique @db.Uuid
+  summary       String
+  model         String
+  prompt_tokens Int?
+  output_tokens Int?
+  created_at    DateTime @default(now())
+
+  lead Lead @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+
+  @@map("ai_summaries")
+}
+
+model User {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clerk_id            String    @unique
+  email               String
+  stripe_customer_id  String?
+  subscription_status String?
+  subscription_id     String?
+  trial_ends_at       DateTime?
+  created_at          DateTime  @default(now())
+
+  @@map("users")
+}
