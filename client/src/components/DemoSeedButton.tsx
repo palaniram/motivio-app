@@ -3,8 +3,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { apiFetch } from '../api/client.js'
 
 export default function DemoSeedButton() {
-  if (!import.meta.env.DEV) return null
-
   const [loading, setLoading] = useState(false)
   const queryClient = useQueryClient()
 

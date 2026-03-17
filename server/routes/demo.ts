@@ -6,11 +6,6 @@ import { generateMockEnrichment } from '../services/enrichment.js'
 const router = Router()
 
 router.post('/seed', async (req, res) => {
-  if (process.env.NODE_ENV === 'production') {
-    res.status(403).json({ error: 'Not available in production' })
-    return
-  }
-
   try {
     const count = req.body?.count ?? 40
 
