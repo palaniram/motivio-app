@@ -3,7 +3,9 @@
   "private": true,
   "workspaces": ["server", "client"],
   "scripts": {
-    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\""
+    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npx prisma generate --schema=prisma/schema.prisma && npm run build -w client && npm run build -w server",
+    "start": "npm start -w server"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",

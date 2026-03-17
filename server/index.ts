@@ -1,5 +1,7 @@
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import leadsRouter from './routes/leads.js'
 import importRouter from './routes/import.js'
 import exportRouter from './routes/export.js'
@@ -15,7 +17,8 @@ const PORT = process.env.PORT ?? 3001
 app.use('/api/webhooks', webhooksRouter)
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:5173' }))
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173'
+app.use(cors({ origin: corsOrigin }))
 app.use(express.json())
 
 // Health check
@@ -30,6 +33,16 @@ app.use('/api/leads', enrichRouter)
 app.use('/api/import', importRouter)
 app.use('/api/export', exportRouter)
 app.use('/api/demo', demoRouter)
+
+// In production, serve the client build and handle SPA fallback
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url))
+  const clientDist = path.join(__dirname, '../../client/dist')
+  app.use(express.static(clientDist))
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'))
+  })
+}
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
