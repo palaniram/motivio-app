@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import type { Enrichment } from '../hooks/useLeads.js'
+import { useEnrich } from '../hooks/useEnrich.js'
 
 interface ContactInfoProps {
   enrichment: Enrichment | null
+  leadId: string
 }
 
 function CopyButton({ value, label }: { value: string; label: string }) {
@@ -42,11 +44,27 @@ function CopyButton({ value, label }: { value: string; label: string }) {
   )
 }
 
-export default function ContactInfo({ enrichment }: ContactInfoProps) {
+export default function ContactInfo({ enrichment, leadId }: ContactInfoProps) {
+  const { enrich, isLoading } = useEnrich(leadId)
+
   if (!enrichment) {
     return (
       <div className="rounded-lg border border-gray-light bg-bg-secondary p-4">
         <p className="text-sm text-gray-mid">No contact info yet</p>
+        <button
+          onClick={() => enrich()}
+          disabled={isLoading}
+          className="mt-3 inline-flex items-center gap-2 rounded-md bg-teal px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal/90 disabled:opacity-50"
+        >
+          {isLoading ? (
+            <>
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              Enriching...
+            </>
+          ) : (
+            'Enrich this lead'
+          )}
+        </button>
       </div>
     )
   }

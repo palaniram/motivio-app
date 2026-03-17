@@ -248,7 +248,7 @@ export default function LeadDetail() {
               <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-mid">
                 Contact Info
               </h3>
-              <ContactInfo enrichment={enrichment} />
+              <ContactInfo enrichment={enrichment} leadId={lead.id} />
             </div>
 
             {/* AI Summary */}

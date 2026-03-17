@@ -3,6 +3,7 @@ import StatsBar from '../components/StatsBar.js'
 import FilterBar from '../components/FilterBar.js'
 import LeadsTable from '../components/LeadsTable.js'
 import ExportButton from '../components/ExportButton.js'
+import DemoSeedButton from '../components/DemoSeedButton.js'
 import { useLeads, type LeadFilters } from '../hooks/useLeads.js'
 
 function filtersFromParams(params: URLSearchParams): LeadFilters {
@@ -52,7 +53,10 @@ export default function Dashboard() {
       {/* Header */}
       <header className="border-b border-gray-light bg-bg-primary px-6 py-4">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
-          <h1 className="text-xl font-bold text-navy">MotivIO</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-bold text-navy">MotivIO</h1>
+            <DemoSeedButton />
+          </div>
           <span className="text-sm text-gray-mid">Motivated Seller Dashboard</span>
         </div>
       </header>
