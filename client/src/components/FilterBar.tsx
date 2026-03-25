@@ -27,6 +27,8 @@ export default function FilterBar() {
   const enriched = searchParams.get('enriched') ?? ''
   const sort = searchParams.get('sort') ?? 'days_since_filing'
 
+  const hasActiveFilters = selectedCounties.length > 0 || selectedLeadTypes.length > 0 || dateFrom || dateTo || minEquity || enriched
+
   function updateParams(updater: (params: URLSearchParams) => void) {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev)
@@ -62,78 +64,118 @@ export default function FilterBar() {
     })
   }
 
+  function clearAll() {
+    setSearchParams(new URLSearchParams())
+  }
+
   return (
-    <div className="rounded-lg border border-gray-light bg-bg-primary p-4 shadow-sm">
+    <div className="card p-5">
+      {/* Filter header */}
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-navy/5">
+            <svg className="h-3.5 w-3.5 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+          </div>
+          <span className="text-sm font-semibold text-navy">Filters</span>
+        </div>
+        {hasActiveFilters && (
+          <button
+            onClick={clearAll}
+            className="inline-flex items-center gap-1 rounded-md border border-red/15 bg-red/5 px-2.5 py-1 text-xs font-medium text-red hover:bg-red/10 transition-colors"
+          >
+            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Clear all
+          </button>
+        )}
+      </div>
+
       <div className="flex flex-wrap items-end gap-5">
-        {/* County multi-select */}
+        {/* County pill toggles */}
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-mid">
+          <label className="mb-2 block text-[0.65rem] font-bold uppercase tracking-widest text-gray-mid">
             County
           </label>
-          <div className="flex gap-3">
-            {COUNTIES.map((county) => (
-              <label key={county} className="flex items-center gap-1.5 text-sm text-gray-dark cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedCounties.includes(county)}
-                  onChange={() => toggleMulti('county', county)}
-                  className="rounded border-gray-light text-teal accent-teal"
-                />
-                {county}
-              </label>
-            ))}
+          <div className="flex gap-1.5">
+            {COUNTIES.map((county) => {
+              const selected = selectedCounties.includes(county)
+              return (
+                <button
+                  key={county}
+                  onClick={() => toggleMulti('county', county)}
+                  className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all duration-150 ${
+                    selected
+                      ? 'border-teal bg-gradient-to-b from-teal to-teal-dark text-white shadow-[0_2px_6px_rgba(11,122,117,0.25)]'
+                      : 'border-gray-light/70 bg-bg-secondary/50 text-gray-dark hover:border-teal/40 hover:bg-teal-light/30'
+                  }`}
+                >
+                  {county}
+                </button>
+              )
+            })}
           </div>
         </div>
 
-        {/* Lead Type multi-select */}
+        {/* Lead Type pill toggles */}
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-mid">
+          <label className="mb-2 block text-[0.65rem] font-bold uppercase tracking-widest text-gray-mid">
             Lead Type
           </label>
-          <div className="flex gap-3">
-            {LEAD_TYPES.map((lt) => (
-              <label key={lt.value} className="flex items-center gap-1.5 text-sm text-gray-dark cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedLeadTypes.includes(lt.value)}
-                  onChange={() => toggleMulti('leadType', lt.value)}
-                  className="rounded border-gray-light text-teal accent-teal"
-                />
-                {lt.label}
-              </label>
-            ))}
+          <div className="flex gap-1.5">
+            {LEAD_TYPES.map((lt) => {
+              const selected = selectedLeadTypes.includes(lt.value)
+              return (
+                <button
+                  key={lt.value}
+                  onClick={() => toggleMulti('leadType', lt.value)}
+                  className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all duration-150 ${
+                    selected
+                      ? 'border-teal bg-gradient-to-b from-teal to-teal-dark text-white shadow-[0_2px_6px_rgba(11,122,117,0.25)]'
+                      : 'border-gray-light/70 bg-bg-secondary/50 text-gray-dark hover:border-teal/40 hover:bg-teal-light/30'
+                  }`}
+                >
+                  {lt.label}
+                </button>
+              )
+            })}
           </div>
         </div>
+
+        {/* Divider */}
+        <div className="hidden lg:block h-10 w-px bg-gray-light/60" />
 
         {/* Filing date range */}
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-mid">
+          <label className="mb-2 block text-[0.65rem] font-bold uppercase tracking-widest text-gray-mid">
             Filing Date
           </label>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <input
               type="date"
               value={dateFrom}
               onChange={(e) => setParam('dateFrom', e.target.value)}
-              className="rounded border border-gray-light px-2 py-1 text-sm text-gray-dark"
+              className="rounded-lg border border-gray-light/70 bg-bg-secondary/30 px-2.5 py-1.5 text-xs text-gray-dark transition-all"
             />
-            <span className="text-gray-mid text-sm">to</span>
+            <span className="text-[0.65rem] font-medium text-gray-mid uppercase">to</span>
             <input
               type="date"
               value={dateTo}
               onChange={(e) => setParam('dateTo', e.target.value)}
-              className="rounded border border-gray-light px-2 py-1 text-sm text-gray-dark"
+              className="rounded-lg border border-gray-light/70 bg-bg-secondary/30 px-2.5 py-1.5 text-xs text-gray-dark transition-all"
             />
           </div>
         </div>
 
         {/* Minimum Equity */}
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-mid">
+          <label className="mb-2 block text-[0.65rem] font-bold uppercase tracking-widest text-gray-mid">
             Min Equity
           </label>
-          <div className="flex items-center gap-1">
-            <span className="text-sm text-gray-mid">$</span>
+          <div className="flex items-center rounded-lg border border-gray-light/70 bg-bg-secondary/30 transition-all focus-within:border-teal focus-within:shadow-[0_0_0_3px_rgba(11,122,117,0.12)]">
+            <span className="pl-2.5 text-xs font-medium text-gray-mid">$</span>
             <input
               type="number"
               min={0}
@@ -141,45 +183,55 @@ export default function FilterBar() {
               placeholder="0"
               value={minEquity}
               onChange={(e) => setParam('minEquity', e.target.value)}
-              className="w-28 rounded border border-gray-light px-2 py-1 text-sm text-gray-dark"
+              className="w-24 border-0 bg-transparent px-1.5 py-1.5 text-xs text-gray-dark focus:ring-0 focus:shadow-none"
             />
           </div>
         </div>
 
         {/* Enrichment filter */}
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-mid">
+          <label className="mb-2 block text-[0.65rem] font-bold uppercase tracking-widest text-gray-mid">
             Enrichment
           </label>
-          <select
-            value={enriched}
-            onChange={(e) => setParam('enriched', e.target.value)}
-            className="rounded border border-gray-light px-2 py-1.5 text-sm text-gray-dark"
-          >
-            {ENRICHMENT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={enriched}
+              onChange={(e) => setParam('enriched', e.target.value)}
+              className="appearance-none rounded-lg border border-gray-light/70 bg-bg-secondary/30 pl-2.5 pr-7 py-1.5 text-xs text-gray-dark transition-all"
+            >
+              {ENRICHMENT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <svg className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-mid" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
 
         {/* Sort */}
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-mid">
+          <label className="mb-2 block text-[0.65rem] font-bold uppercase tracking-widest text-gray-mid">
             Sort By
           </label>
-          <select
-            value={sort}
-            onChange={(e) => setParam('sort', e.target.value)}
-            className="rounded border border-gray-light px-2 py-1.5 text-sm text-gray-dark"
-          >
-            {SORT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={sort}
+              onChange={(e) => setParam('sort', e.target.value)}
+              className="appearance-none rounded-lg border border-gray-light/70 bg-bg-secondary/30 pl-2.5 pr-7 py-1.5 text-xs text-gray-dark transition-all"
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <svg className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-mid" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
       </div>
     </div>

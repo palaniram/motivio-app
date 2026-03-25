@@ -19,9 +19,8 @@ export function buildQueryString(params: Record<string, string | string[] | numb
   for (const [key, value] of Object.entries(params)) {
     if (value === undefined || value === null || value === '') continue
     if (Array.isArray(value)) {
-      for (const v of value) {
-        if (v) searchParams.append(key, v)
-      }
+      const joined = value.filter(Boolean).join(',')
+      if (joined) searchParams.set(key, joined)
     } else {
       searchParams.set(key, String(value))
     }

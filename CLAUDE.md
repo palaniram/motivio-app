@@ -1,11 +1,11 @@
-# MotivIO — CLAUDE.md
+# Seller Quest — CLAUDE.md
 # Motivated Seller Data Sourcing for Bay Area Investors
 
 ---
 
 ## What This Is
 
-MotivIO is a micro SaaS product that gives Bay Area real estate investors
+Seller Quest is a micro SaaS product that gives Bay Area real estate investors
 a clean, enriched, ready-to-work motivated seller list in 10 minutes.
 No PropStream expertise required. No vendor dependency. No setup calls.
 
@@ -450,7 +450,7 @@ Summary text styling:
 ## Project Structure
 
 ```
-motivio/
+seller-quest/
 ├── CLAUDE.md                    ← this file
 ├── .env.example
 ├── .env.local                   ← never commit
@@ -535,7 +535,7 @@ motivio/
 # .env.example
 
 # Database
-DATABASE_URL=postgresql://user:password@localhost:5432/motivio
+DATABASE_URL=postgresql://user:password@localhost:5432/seller_quest
 
 # Clerk Auth
 CLERK_SECRET_KEY=sk_test_...

@@ -29,7 +29,7 @@ export default function DemoSeedButton() {
     <button
       onClick={handleSeed}
       disabled={loading}
-      className="rounded-md border border-teal px-3 py-1.5 text-sm font-medium text-teal hover:bg-teal/5 disabled:opacity-50 transition-colors"
+      className="inline-flex items-center gap-1.5 rounded-md border border-teal px-3 py-1.5 text-sm font-medium text-teal shadow-sm hover:shadow hover:bg-teal/5 active:scale-[0.98] disabled:opacity-50 transition-all duration-150"
     >
       {loading ? (
         <span className="flex items-center gap-1.5">
@@ -40,7 +40,12 @@ export default function DemoSeedButton() {
           Seeding...
         </span>
       ) : (
-        'Generate Demo Data'
+        <>
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+          Generate Demo Data
+        </>
       )}
     </button>
   )

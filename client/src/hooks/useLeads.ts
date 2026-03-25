@@ -80,7 +80,7 @@ export function useLeads(filters: LeadFilters) {
         enriched: filters.enriched,
         sort: filters.sort,
         page: filters.page,
-        limit: filters.limit ?? 50,
+        limit: filters.limit ?? 25,
       })
       return apiFetch<LeadsResponse>(`/leads${qs}`)
     },

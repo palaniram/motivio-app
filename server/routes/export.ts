@@ -121,7 +121,7 @@ router.get('/csv', async (req: Request, res: Response) => {
     const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n')
 
     res.setHeader('Content-Type', 'text/csv')
-    res.setHeader('Content-Disposition', 'attachment; filename="motivio-leads.csv"')
+    res.setHeader('Content-Disposition', 'attachment; filename="seller-quest-leads.csv"')
     res.send(csv)
   } catch (err) {
     console.error('GET /api/export/csv error:', err)

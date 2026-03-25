@@ -152,7 +152,7 @@ router.get('/', async (req: Request, res: Response) => {
     const orderBy = buildOrderBy(req.query.sort as string | undefined)
 
     const page = Math.max(1, parseInt(req.query.page as string, 10) || 1)
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string, 10) || 50))
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string, 10) || 25))
     const skip = (page - 1) * limit
 
     const [leads, total] = await Promise.all([

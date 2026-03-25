@@ -2,7 +2,9 @@
 
 @theme {
   --color-navy: #0D2137;
+  --color-navy-light: #162D47;
   --color-teal: #0B7A75;
+  --color-teal-dark: #096B67;
   --color-gold: #C8902A;
   --color-red: #9B2335;
   --color-green: #1A7A4A;
@@ -10,7 +12,186 @@
   --color-gray-mid: #5A6A7A;
   --color-gray-light: #E0E4EA;
   --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #F7F8FA;
+  --color-bg-secondary: #F5F7FA;
   --color-teal-light: #E6F4F3;
   --font-family-sans: "Inter", system-ui, sans-serif;
+  --animate-fade-in: fade-in 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up: slide-up 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Keyframes ───────────────────────────────── */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 6px 2px currentColor; }
+  50% { box-shadow: 0 0 10px 3px currentColor; }
+}
+
+/* ── Base styles ─────────────────────────────── */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-bg-secondary);
+}
+
+/* Subtle dot-grid background for page depth */
+.bg-pattern {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(13, 33, 55, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* ── Skeleton loading ────────────────────────── */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, var(--color-gray-light) 0%, #EDF0F4 50%, var(--color-gray-light) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+/* ── Premium card base ───────────────────────── */
+
+.card {
+  background: var(--color-bg-primary);
+  border: 1px solid rgba(224, 228, 234, 0.7);
+  border-radius: 12px;
+  box-shadow:
+    0 1px 2px rgba(13, 33, 55, 0.04),
+    0 4px 12px rgba(13, 33, 55, 0.03);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.card:hover {
+  box-shadow:
+    0 1px 2px rgba(13, 33, 55, 0.04),
+    0 8px 24px rgba(13, 33, 55, 0.06);
+}
+
+.card-interactive:hover {
+  transform: translateY(-1px);
+}
+
+/* ── Glass header ────────────────────────────── */
+
+.glass-header {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border-bottom: 1px solid rgba(224, 228, 234, 0.5);
+}
+
+/* ── Focus styles ────────────────────────────── */
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgba(11, 122, 117, 0.12), 0 1px 2px rgba(0,0,0,0.04);
+  transition: all 150ms ease;
+}
+
+/* ── Table refinements ───────────────────────── */
+
+.table-premium {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-premium thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(180deg, #F8F9FB 0%, #F1F3F7 100%);
+  border-bottom: 2px solid var(--color-gray-light);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-gray-mid);
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+}
+
+.table-premium tbody tr {
+  transition: background-color 150ms ease;
+}
+
+.table-premium tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(224, 228, 234, 0.5);
+}
+
+.table-premium tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Urgency dot pulse ───────────────────────── */
+
+.urgency-pulse {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Pill badges ─────────────────────────────── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  padding: 0.2rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+/* ── Scrollbar styling ───────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 106, 122, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(90, 106, 122, 0.35);
+}
+
+/* ── Gradient text utility ───────────────────── */
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
